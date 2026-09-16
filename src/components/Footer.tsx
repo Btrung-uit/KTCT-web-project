@@ -1,19 +1,29 @@
-
+import { Crown } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
-    <footer className="bg-[#050506] border-t border-midas-gold/10 py-10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
-        <div className="mb-4 md:mb-0 text-center md:text-left">
-          <h3 className="font-serif text-xl font-bold text-midas-gold uppercase tracking-wider">Midas</h3>
-          <p className="text-sm text-midas-gray mt-1">Vàng, Tiền và những bài học kinh tế</p>
-        </div>
+    <footer className="bg-midas-dark border-t border-midas-gold/10 pt-16 pb-10 px-5 sm:px-6">
+      <div className="max-w-7xl mx-auto flex flex-col items-center text-center">
         
-        <div className="flex space-x-6 text-sm text-midas-gray mb-4 md:mb-0">
-          <a href="#" className="hover:text-midas-gold transition-colors">Về chúng tôi</a>
-          <a href="#" className="hover:text-midas-gold transition-colors">Liên hệ</a>
+        {/* Logo */}
+        <div className="flex flex-col items-center mb-6">
+          <Crown className="w-8 h-8 text-midas-gold mb-3" />
+          <span className="font-serif text-2xl font-bold tracking-wider text-midas-gold uppercase leading-none">Midas</span>
+          <span className="text-[11px] text-midas-ivory/60 mt-2 uppercase tracking-widest">Vàng, Tiền và những bài học kinh tế</span>
         </div>
 
+        {/* Links */}
+        <div className="flex justify-center items-center space-x-6 md:space-x-8 text-sm text-midas-gray/80 w-full mb-8 border-t border-b border-midas-gold/10 py-5 mt-4">
+          <Link to="/about" className="hover:text-midas-gold transition-colors">Về chúng tôi</Link>
+          <span className="w-1 h-1 rounded-full bg-midas-gold/30"></span>
+          <a href="#contact" className="hover:text-midas-gold transition-colors">Liên hệ</a>
+        </div>
+
+        {/* Copyright */}
+        <div className="text-xs text-midas-gray/50">
+          &copy; 2024 MIDAS. All rights reserved.
+        </div>
       </div>
     </footer>
   );

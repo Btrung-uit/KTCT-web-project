@@ -1,92 +1,166 @@
-
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronLeft, ChevronRight, BookOpen, ArrowLeft } from 'lucide-react';
 import { ebookData } from '../data/ebookData';
-import { ChevronLeft, ChevronRight, Book } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const EbookViewer = () => {
   const [currentPage, setCurrentPage] = useState(0);
-  const totalPages = ebookData.length;
-  const page = ebookData[currentPage];
+  const [direction, setDirection] = useState(0);
+  const navigate = useNavigate();
+  
+  // Touch variables for swipe
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
 
   const nextPage = () => {
-    if (currentPage < totalPages - 1) setCurrentPage(curr => curr + 1);
+    if (currentPage < ebookData.length - 1) {
+      setDirection(1);
+      setCurrentPage(prev => prev + 1);
+    }
   };
 
   const prevPage = () => {
-    if (currentPage > 0) setCurrentPage(curr => curr - 1);
+    if (currentPage > 0) {
+      setDirection(-1);
+      setCurrentPage(prev => prev - 1);
+    }
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return;
+    
+    const distance = touchStartX.current - touchEndX.current;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe) {
+      nextPage();
+    } else if (isRightSwipe) {
+      prevPage();
+    }
+    
+    // Reset
+    touchStartX.current = null;
+    touchEndX.current = null;
+  };
+
+  const variants = {
+    enter: (direction: number) => {
+      return {
+        x: direction > 0 ? 50 : -50,
+        opacity: 0
+      };
+    },
+    center: {
+      zIndex: 1,
+      x: 0,
+      opacity: 1
+    },
+    exit: (direction: number) => {
+      return {
+        zIndex: 0,
+        x: direction < 0 ? 50 : -50,
+        opacity: 0
+      };
+    }
   };
 
   return (
-    <div className="min-h-[85vh] py-12 px-4 flex flex-col items-center">
+    <div className="flex flex-col min-h-screen md:min-h-[85vh] bg-midas-dark pt-16 md:pt-24 pb-20 md:pb-10 max-w-5xl mx-auto md:px-6 relative">
       
-      {/* Title */}
-      <div className="text-center mb-8">
-        <h2 className="text-3xl font-serif text-midas-gold uppercase tracking-widest flex items-center justify-center">
-          <Book className="mr-3 w-6 h-6" /> Midas Ebook
-        </h2>
+      {/* Mobile Top Header */}
+      <div className="md:hidden flex items-center justify-between px-5 py-4 border-b border-midas-gold/10 bg-midas-dark/80 backdrop-blur-md sticky top-16 z-30">
+        <button onClick={() => navigate('/')} className="flex items-center text-midas-gold">
+          <ArrowLeft className="w-5 h-5 mr-2" />
+          <span className="font-serif font-bold tracking-widest uppercase text-sm">Midas</span>
+        </button>
+        <span className="text-midas-ivory/60 text-sm font-serif">{currentPage + 1} / {ebookData.length}</span>
       </div>
 
-      {/* Book Container */}
-      <div className="w-full max-w-4xl bg-midas-panel border border-midas-gold/20 rounded-lg shadow-2xl relative overflow-hidden">
-        
-        {/* Progress bar at top */}
-        <div className="h-1 w-full bg-black/50">
-          <div 
-            className="h-full bg-midas-gold transition-all duration-300" 
-            style={{ width: `${((currentPage + 1) / totalPages) * 100}%` }}
-          />
-        </div>
-
-        {/* Content Area */}
-        <div className="p-8 md:p-16 min-h-[400px] flex flex-col justify-center relative bg-[url('https://www.transparenttextures.com/patterns/aged-paper.png')] bg-blend-overlay">
-          
-          <AnimatePresence mode="wait">
+      <div className="flex flex-1 relative overflow-hidden">
+        {/* Main Content Area */}
+        <div 
+          className="flex-1 flex flex-col items-center justify-center relative w-full h-full"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
+          <AnimatePresence initial={false} custom={direction} mode="wait">
             <motion.div
               key={currentPage}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.4 }}
+              custom={direction}
+              variants={variants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{
+                x: { type: "spring", stiffness: 300, damping: 30 },
+                opacity: { duration: 0.2 }
+              }}
+              className="w-full max-w-3xl bg-midas-panel/50 md:border md:border-midas-gold/20 md:rounded-xl shadow-2xl p-6 md:p-12 min-h-[65vh] md:min-h-[500px] flex flex-col mt-4 md:mt-0"
             >
-              {currentPage === 0 ? (
-                <div className="text-center">
-                  <h1 className="text-4xl md:text-5xl font-serif text-midas-gold mb-6 leading-tight">{page.title}</h1>
-                  <p className="text-lg md:text-xl text-midas-ivory/90 leading-relaxed font-light">{page.content}</p>
+              <div className="flex items-center justify-center mb-6 md:mb-8">
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-midas-gold/30 flex items-center justify-center">
+                  <BookOpen className="w-5 h-5 md:w-6 md:h-6 text-midas-gold" />
                 </div>
-              ) : (
-                <div>
-                  <h2 className="text-3xl font-serif text-midas-champagne mb-6 border-b border-midas-gold/30 pb-4 inline-block">{page.title}</h2>
-                  <p className="text-lg text-midas-ivory/90 leading-relaxed font-light whitespace-pre-line">{page.content}</p>
-                </div>
-              )}
+              </div>
+              
+              <h2 className="text-2xl md:text-4xl font-serif font-bold text-midas-gold mb-6 md:mb-8 text-center px-2 leading-snug">
+                {ebookData[currentPage].title}
+              </h2>
+              
+              <div className="prose prose-invert prose-p:text-midas-ivory/90 prose-p:leading-relaxed prose-p:text-base md:prose-p:text-lg max-w-none text-justify px-2 md:px-6">
+                {ebookData[currentPage].content.split('\n\n').map((paragraph: string, idx: number) => (
+                  <p key={idx} className="mb-4">{paragraph}</p>
+                ))}
+              </div>
             </motion.div>
           </AnimatePresence>
         </div>
-
-        {/* Navigation Footer */}
-        <div className="bg-black/40 border-t border-midas-gold/20 p-4 flex justify-between items-center">
-          <button 
-            onClick={prevPage}
-            disabled={currentPage === 0}
-            className="flex items-center px-4 py-2 text-midas-gold hover:bg-midas-gold/10 rounded disabled:opacity-30 transition-colors"
-          >
-            <ChevronLeft className="w-5 h-5 mr-1" /> Trang trước
-          </button>
-          
-          <span className="text-midas-gray font-mono text-sm tracking-widest">
-            {currentPage + 1} / {totalPages}
-          </span>
-
-          <button 
-            onClick={nextPage}
-            disabled={currentPage === totalPages - 1}
-            className="flex items-center px-4 py-2 text-midas-gold hover:bg-midas-gold/10 rounded disabled:opacity-30 transition-colors"
-          >
-            Trang sau <ChevronRight className="w-5 h-5 ml-1" />
-          </button>
-        </div>
       </div>
+
+      {/* Progress Bar */}
+      <div className="absolute bottom-[60px] md:bottom-20 left-0 w-full h-1 bg-midas-gold/10">
+        <div 
+          className="h-full bg-midas-gold transition-all duration-300"
+          style={{ width: `${((currentPage + 1) / ebookData.length) * 100}%` }}
+        />
+      </div>
+
+      {/* Bottom Navigation */}
+      <div className="fixed md:absolute bottom-0 left-0 w-full bg-midas-dark/90 md:bg-transparent backdrop-blur-md border-t border-midas-gold/10 md:border-none px-5 py-4 flex items-center justify-between z-30">
+        <button 
+          onClick={prevPage}
+          disabled={currentPage === 0}
+          className="flex items-center justify-center w-12 h-12 md:w-auto md:h-auto md:px-6 md:py-3 bg-midas-panel md:bg-midas-gold text-midas-gold md:text-black font-bold rounded-full md:rounded-lg disabled:opacity-30 disabled:cursor-not-allowed hover:bg-midas-gold/20 md:hover:bg-yellow-500 transition-all border border-midas-gold/30 md:border-none"
+        >
+          <ChevronLeft className="w-6 h-6 md:mr-2" />
+          <span className="hidden md:inline">Trang trước</span>
+        </button>
+
+        <div className="text-midas-ivory/60 font-serif text-sm">
+          {currentPage + 1} / {ebookData.length}
+        </div>
+
+        <button 
+          onClick={nextPage}
+          disabled={currentPage === ebookData.length - 1}
+          className="flex items-center justify-center w-12 h-12 md:w-auto md:h-auto md:px-6 md:py-3 bg-midas-panel md:bg-midas-gold text-midas-gold md:text-black font-bold rounded-full md:rounded-lg disabled:opacity-30 disabled:cursor-not-allowed hover:bg-midas-gold/20 md:hover:bg-yellow-500 transition-all border border-midas-gold/30 md:border-none"
+        >
+          <span className="hidden md:inline">Trang sau</span>
+          <ChevronRight className="w-6 h-6 md:ml-2" />
+        </button>
+      </div>
+
     </div>
   );
 };
