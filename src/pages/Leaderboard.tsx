@@ -2,22 +2,52 @@ import { useEffect, useState } from 'react';
 import { Trophy, Clock, CheckCircle } from 'lucide-react';
 import type { ScoreEntry } from './Game';
 import { motion } from 'framer-motion';
+import { db } from '../lib/firebase';
+import { collection, onSnapshot } from 'firebase/firestore';
 
 const Leaderboard = () => {
   const [scores, setScores] = useState<ScoreEntry[]>([]);
   const [currentPlayer, setCurrentPlayer] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem('midas_scores') || '[]');
-    // Sort: Score Descending, then Correct Descending, then Time Ascending
-    data.sort((a: ScoreEntry, b: ScoreEntry) => {
-      if (b.score !== a.score) return b.score - a.score;
-      if (b.correct !== a.correct) return b.correct - a.correct;
-      return a.time.localeCompare(b.time);
-    });
-    setScores(data);
-    
     setCurrentPlayer(localStorage.getItem('midas_last_player'));
+
+    if (!db) {
+      // Fallback to local storage if Firebase is not configured
+      const data = JSON.parse(localStorage.getItem('midas_scores') || '[]');
+      data.sort((a: ScoreEntry, b: ScoreEntry) => {
+        if (b.score !== a.score) return b.score - a.score;
+        if (b.correct !== a.correct) return b.correct - a.correct;
+        return a.time.localeCompare(b.time);
+      });
+      setScores(data);
+      setLoading(false);
+      return;
+    }
+
+    // Real-time listener for Firebase
+    const unsubscribe = onSnapshot(collection(db, 'leaderboard'), (snapshot) => {
+      const data: ScoreEntry[] = [];
+      snapshot.forEach((doc) => {
+        data.push(doc.data() as ScoreEntry);
+      });
+
+      // Sort client-side to avoid forcing composite indexes on Firestore
+      data.sort((a: ScoreEntry, b: ScoreEntry) => {
+        if (b.score !== a.score) return b.score - a.score;
+        if (b.correct !== a.correct) return b.correct - a.correct;
+        return a.time.localeCompare(b.time);
+      });
+
+      setScores(data);
+      setLoading(false);
+    }, (error) => {
+      console.error("Error fetching leaderboard: ", error);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
   }, []);
 
   const getRankIcon = (index: number) => {
@@ -51,9 +81,14 @@ const Leaderboard = () => {
         </div>
 
         {/* Mobile & Desktop List */}
-        <div className="divide-y divide-midas-gold/10">
-          {scores.length === 0 ? (
-            <div className="p-10 text-center text-midas-gray">
+        <div className="divide-y divide-midas-gold/10 min-h-[200px]">
+          {loading ? (
+            <div className="p-10 text-center text-midas-gold animate-pulse flex flex-col items-center justify-center h-[200px]">
+              <Trophy className="w-8 h-8 mb-3 opacity-50" />
+              Đang tải dữ liệu...
+            </div>
+          ) : scores.length === 0 ? (
+            <div className="p-10 text-center text-midas-gray flex flex-col items-center justify-center h-[200px]">
               Chưa có dữ liệu. Hãy là người đầu tiên tham gia thử thách!
             </div>
           ) : (
@@ -110,6 +145,34 @@ const Leaderboard = () => {
           )}
         </div>
       </div>
+
+      {/* Admin Reset Button (Hidden by default, accessible via ?admin=true) */}
+      {window.location.search.includes('admin=true') && (
+        <div className="mt-8 text-center">
+          <button 
+            onClick={async () => {
+              if (window.confirm("BẠN CÓ CHẮC CHẮN MUỐN XÓA TOÀN BỘ BẢNG XẾP HẠNG? Hành động này không thể hoàn tác!")) {
+                if (db) {
+                  import('firebase/firestore').then(async ({ collection, getDocs, deleteDoc, doc }) => {
+                    const snapshot = await getDocs(collection(db, 'leaderboard'));
+                    snapshot.forEach((document) => {
+                      deleteDoc(doc(db, 'leaderboard', document.id));
+                    });
+                    alert("Đã xóa sạch dữ liệu trên Firebase!");
+                  });
+                } else {
+                  localStorage.removeItem('midas_scores');
+                  setScores([]);
+                  alert("Đã xóa sạch dữ liệu Local Storage!");
+                }
+              }
+            }}
+            className="px-4 py-2 bg-red-900/50 text-red-300 border border-red-500/30 rounded-lg text-sm font-bold hover:bg-red-800 transition-colors"
+          >
+            ⚠️ XÓA TOÀN BỘ BẢNG XẾP HẠNG
+          </button>
+        </div>
+      )}
     </div>
   );
 };

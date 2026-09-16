@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { questions } from '../data/questions';
 import { Trophy, Clock, Play, Search, RotateCcw } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { db } from '../lib/firebase';
+import { collection, addDoc } from 'firebase/firestore';
 
 type GameState = 'intro' | 'playing' | 'result';
 
@@ -68,7 +70,7 @@ const Game = () => {
     }
   };
 
-  const saveScore = () => {
+  const saveScore = async () => {
     const finalTimeMs = Date.now() - startTime;
     const minutes = Math.floor(finalTimeMs / 60000);
     const seconds = Math.floor((finalTimeMs % 60000) / 1000);
@@ -76,28 +78,31 @@ const Game = () => {
 
     const newScore: ScoreEntry = {
       name: playerName,
-      score: score, // using current state might be slightly off due to closure, but React state batching usually handles this if called after render. To be safe, in a real app use refs or calculate final score. Assuming correct here.
+      score: score, 
       correct: correctCount,
       time: timeStr,
       date: new Date().toISOString()
     };
 
-    // Need to handle score correctly since setScore is async.
-    // We will recalculate just to be sure.
-    let finalScore = score;
-    let finalCorrect = correctCount;
     if (selectedOption === questions[currentQIndex].correctAnswer) {
-        // It was already added in handleAnswer
+        newScore.score += 50;
+        newScore.correct += 1;
+        setScore(newScore.score);
+        setCorrectCount(newScore.correct);
     }
 
-    newScore.score = finalScore;
-    newScore.correct = finalCorrect;
-
-    const existingScores = JSON.parse(localStorage.getItem('midas_scores') || '[]');
-    existingScores.push(newScore);
-    localStorage.setItem('midas_scores', JSON.stringify(existingScores));
+    try {
+      if (db) {
+        await addDoc(collection(db, 'leaderboard'), newScore);
+      }
+    } catch (e) {
+      console.error("Error saving to Firebase: ", e);
+      // Fallback to local storage
+      const existingScores = JSON.parse(localStorage.getItem('midas_scores') || '[]');
+      existingScores.push(newScore);
+      localStorage.setItem('midas_scores', JSON.stringify(existingScores));
+    }
     
-    // Save current player name to highlight in leaderboard
     localStorage.setItem('midas_last_player', playerName);
   };
 
