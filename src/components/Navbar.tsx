@@ -38,8 +38,7 @@ const Navbar = () => {
     { name: 'Đọc Ebook', path: '/ebook' },
     { name: 'Chơi trò chơi', path: '/game' },
     { name: 'Bảng xếp hạng', path: '/leaderboard' },
-    { name: 'Giới thiệu', path: '/about' },
-    { name: 'Liên hệ', path: '#contact' },
+    { name: 'Về chúng tôi', path: '/about' },
   ];
 
   return (

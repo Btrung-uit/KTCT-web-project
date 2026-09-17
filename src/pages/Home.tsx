@@ -8,16 +8,8 @@ const Home = () => {
       
       {/* HERO SECTION */}
       <section className="relative min-h-[75vh] md:min-h-[90vh] flex flex-col justify-center pt-16 md:pt-24 pb-16 overflow-hidden">
-        {/* Background Image / Overlay */}
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-r from-midas-dark/90 via-midas-dark/50 to-midas-dark/80 md:to-transparent z-10"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-midas-dark via-midas-dark/20 to-transparent z-10"></div>
-          <img 
-            src="/assets/images/hero-bg.jpg" 
-            alt="Midas Hero" 
-            className="w-full h-full object-cover object-[70%_center] md:object-center opacity-90"
-          />
-        </div>
+        {/* Subtle Text Backdrop for Readability */}
+        <div className="absolute inset-0 z-0 bg-gradient-to-r from-midas-dark/80 via-midas-dark/40 to-transparent pointer-events-none"></div>
 
         <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 relative z-20 w-full flex flex-col md:flex-row items-center justify-center md:justify-start h-full flex-grow">
           
