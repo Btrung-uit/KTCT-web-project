@@ -44,6 +44,14 @@ const Leaderboard = () => {
       setLoading(false);
     }, (error) => {
       console.error("Error fetching leaderboard: ", error);
+      // Fallback to local storage
+      const data = JSON.parse(localStorage.getItem('midas_scores') || '[]');
+      data.sort((a: ScoreEntry, b: ScoreEntry) => {
+        if (b.score !== a.score) return b.score - a.score;
+        if (b.correct !== a.correct) return b.correct - a.correct;
+        return a.time.localeCompare(b.time);
+      });
+      setScores(data);
       setLoading(false);
     });
 

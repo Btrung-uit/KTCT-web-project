@@ -75,7 +75,7 @@ const EbookViewer = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen md:min-h-[85vh] bg-midas-dark pt-16 md:pt-24 pb-20 md:pb-10 max-w-5xl mx-auto md:px-6 relative">
+    <div className="flex flex-col min-h-screen md:min-h-[85vh] bg-transparent pt-16 md:pt-24 pb-20 md:pb-10 max-w-5xl mx-auto md:px-6 relative">
       
       {/* Mobile Top Header */}
       <div className="md:hidden flex items-center justify-between px-5 py-4 border-b border-midas-gold/10 bg-midas-dark/80 backdrop-blur-md sticky top-16 z-30">
