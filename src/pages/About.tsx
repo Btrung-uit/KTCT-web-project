@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Users, BookOpen, Crown } from 'lucide-react';
+import { Users, Crown } from 'lucide-react';
 
 const teamMembers = [
   { id: '25521963', name: 'Nguyễn Đức Bảo Trung', role: 'Đội trưởng' },
