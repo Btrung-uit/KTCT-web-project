@@ -14,11 +14,11 @@ function App() {
       <div className="flex flex-col min-h-screen relative">
         {/* Global Background */}
         <div className="fixed inset-0 z-[-1] bg-midas-dark">
-          <div className="absolute inset-0 bg-gradient-to-b from-midas-dark/40 via-midas-dark/80 to-midas-dark z-10 pointer-events-none"></div>
+          <div className="absolute inset-0 bg-midas-dark/70 z-10 pointer-events-none"></div>
           <img 
             src="/assets/images/hero-bg.jpg" 
             alt="Midas Background" 
-            className="w-full h-full object-cover opacity-40"
+            className="w-full h-full object-cover opacity-80"
           />
         </div>
 
