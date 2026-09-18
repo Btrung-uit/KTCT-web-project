@@ -154,9 +154,33 @@ const Leaderboard = () => {
         </div>
       </div>
 
-      {/* Admin Reset Button (Hidden by default, accessible via ?admin=true) */}
+      {/* Admin Panel (Hidden by default, accessible via ?admin=true) */}
       {window.location.search.includes('admin=true') && (
-        <div className="mt-8 text-center">
+        <div className="mt-8 p-6 bg-midas-dark/80 border border-red-500/30 rounded-xl text-center flex flex-col md:flex-row items-center justify-center gap-4">
+          <button 
+            onClick={async () => {
+              if (db) {
+                import('firebase/firestore').then(async ({ doc, setDoc, getDoc }) => {
+                  try {
+                    const docRef = doc(db, 'config', 'gameState');
+                    const snap = await getDoc(docRef);
+                    const currentStatus = snap.exists() ? snap.data().isOpen : true; // default true
+                    
+                    await setDoc(docRef, { isOpen: !currentStatus });
+                    alert(`Đã ${!currentStatus ? 'MỞ KHÓA' : 'KHÓA'} trò chơi thành công!`);
+                  } catch (e) {
+                    alert("Lỗi: Không thể kết nối Firebase.");
+                  }
+                });
+              } else {
+                alert("Firebase chưa được cấu hình!");
+              }
+            }}
+            className="px-6 py-3 bg-blue-900/50 text-blue-300 border border-blue-500/30 rounded-lg text-sm font-bold hover:bg-blue-800 transition-colors w-full md:w-auto"
+          >
+            🔒 BẬT / TẮT KHÓA TRÒ CHƠI
+          </button>
+
           <button 
             onClick={async () => {
               if (window.confirm("BẠN CÓ CHẮC CHẮN MUỐN XÓA TOÀN BỘ BẢNG XẾP HẠNG? Hành động này không thể hoàn tác!")) {
@@ -175,7 +199,7 @@ const Leaderboard = () => {
                 }
               }
             }}
-            className="px-4 py-2 bg-red-900/50 text-red-300 border border-red-500/30 rounded-lg text-sm font-bold hover:bg-red-800 transition-colors"
+            className="px-6 py-3 bg-red-900/50 text-red-300 border border-red-500/30 rounded-lg text-sm font-bold hover:bg-red-800 transition-colors w-full md:w-auto"
           >
             ⚠️ XÓA TOÀN BỘ BẢNG XẾP HẠNG
           </button>

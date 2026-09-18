@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { questions } from '../data/questions';
-import { Trophy, Clock, Play, Search, RotateCcw } from 'lucide-react';
+import { Trophy, Clock, Play, Search, RotateCcw, Lock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../lib/firebase';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, doc, onSnapshot } from 'firebase/firestore';
 
 type GameState = 'intro' | 'playing' | 'result';
 
@@ -27,8 +27,29 @@ const Game = () => {
   const [startTime, setStartTime] = useState<number>(0);
   const [endTime, setEndTime] = useState<number>(0);
   const [elapsedTime, setElapsedTime] = useState(0);
+  const [isGameLocked, setIsGameLocked] = useState<boolean>(true); // Khóa mặc định, đợi Firebase phản hồi
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!db) {
+      setIsGameLocked(false);
+      return;
+    }
+    const unsubscribe = onSnapshot(doc(db, 'config', 'gameState'), (snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.data();
+        setIsGameLocked(data.isOpen === false);
+      } else {
+        setIsGameLocked(false); // Nếu chưa có document thì mặc định mở
+      }
+    }, (error) => {
+      console.error("Lỗi lấy trạng thái game", error);
+      setIsGameLocked(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     let timer: ReturnType<typeof setInterval>;
@@ -120,31 +141,44 @@ const Game = () => {
           animate={{ opacity: 1, scale: 1 }}
           className="bg-midas-panel border border-midas-gold/30 p-8 md:p-12 rounded-2xl max-w-md w-full shadow-2xl text-center"
         >
-          <div className="w-16 h-16 bg-midas-gold/20 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Trophy className="w-8 h-8 text-midas-gold" />
-          </div>
-          <h1 className="text-2xl md:text-3xl font-serif font-bold text-midas-gold mb-2 uppercase">Midas Challenge</h1>
-          <p className="text-midas-ivory/80 mb-2 font-medium tracking-widest text-sm">20 CÂU HỎI</p>
-          <p className="text-midas-gray italic mb-8">"Bạn hiểu câu chuyện Midas đến đâu?"</p>
-          
-          <form onSubmit={handleStart} className="space-y-6">
-            <div>
-              <input 
-                type="text" 
-                required
-                placeholder="Nhập tên / biệt danh của bạn"
-                value={playerName}
-                onChange={(e) => setPlayerName(e.target.value)}
-                className="w-full bg-black/50 border border-midas-gold/30 rounded-lg px-4 py-4 text-midas-ivory placeholder-midas-gray focus:outline-none focus:border-midas-gold transition-colors text-center text-lg"
-              />
-            </div>
-            <button 
-              type="submit"
-              className="w-full bg-midas-gold text-black font-bold text-lg py-4 rounded-lg flex items-center justify-center hover:bg-yellow-500 transition-colors shadow-lg shadow-midas-gold/20"
-            >
-              <Play className="w-5 h-5 mr-2" /> BẮT ĐẦU
-            </button>
-          </form>
+          {isGameLocked ? (
+            <>
+              <div className="w-16 h-16 bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-6 border border-red-500/30">
+                <Lock className="w-8 h-8 text-red-400" />
+              </div>
+              <h1 className="text-2xl md:text-3xl font-serif font-bold text-red-400 mb-4 uppercase">TRÒ CHƠI ĐANG KHÓA</h1>
+              <p className="text-midas-ivory/80 mb-8 leading-relaxed">
+                Vui lòng theo dõi phần thuyết trình Ebook của nhóm trước nhé. Trò chơi sẽ được mở khóa sau ít phút nữa!
+              </p>
+            </>
+          ) : (
+            <>
+              <div className="w-16 h-16 bg-midas-gold/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Trophy className="w-8 h-8 text-midas-gold" />
+              </div>
+              <h1 className="text-2xl md:text-3xl font-serif font-bold text-midas-gold mb-2 uppercase">Midas Challenge</h1>
+              <p className="text-midas-ivory/80 mb-2 font-medium tracking-widest text-sm">20 CÂU HỎI</p>
+              <p className="text-midas-gray italic mb-8">"Bạn hiểu câu chuyện Midas đến đâu?"</p>
+              
+              <form onSubmit={handleStart} className="flex flex-col space-y-4">
+                <input 
+                  type="text" 
+                  required
+                  placeholder="Nhập tên của bạn..."
+                  value={playerName}
+                  onChange={(e) => setPlayerName(e.target.value)}
+                  className="px-4 py-3 bg-midas-dark/50 border border-midas-gold/30 rounded-lg text-midas-ivory focus:outline-none focus:border-midas-gold w-full text-center placeholder-midas-gray/50"
+                />
+                <button 
+                  type="submit"
+                  disabled={!playerName.trim()}
+                  className="w-full flex items-center justify-center py-3 bg-midas-gold text-black font-bold rounded-lg hover:bg-yellow-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <Play className="w-5 h-5 mr-2" /> Bắt đầu ngay
+                </button>
+              </form>
+            </>
+          )}
         </motion.div>
       </div>
     );
