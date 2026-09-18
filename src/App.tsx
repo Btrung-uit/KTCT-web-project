@@ -18,7 +18,7 @@ function App() {
           <img 
             src="/assets/images/hero-bg.jpg" 
             alt="Midas Background" 
-            className="w-full h-full object-cover opacity-80"
+            className="w-full h-full object-cover object-[75%_center] md:object-center opacity-80"
           />
         </div>
 
