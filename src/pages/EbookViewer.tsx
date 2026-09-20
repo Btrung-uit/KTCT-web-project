@@ -27,14 +27,17 @@ const EbookViewer = () => {
         </a>
       </div>
 
-      {/* Main Content Area - PDF Iframe */}
+      {/* Main Content Area - FlipHTML5 Iframe */}
       <div className="flex-1 w-full bg-midas-panel/50 border border-midas-gold/20 rounded-xl shadow-2xl overflow-hidden relative">
         <iframe 
-          src="/assets/midas-ebook.pdf#toolbar=0" 
+          // TODO: THAY ĐỔI ĐƯỜNG LINK BÊN DƯỚI THÀNH LINK FLIPHTML5 CỦA BẠN
+          src="https://online.fliphtml5.com/xxxx/yyyy/" 
           className="w-full h-full border-none"
-          title="Midas Ebook"
+          title="Midas Ebook Flipbook"
+          allowFullScreen
+          allow="clipboard-write"
         >
-          Trình duyệt của bạn không hỗ trợ xem PDF trực tiếp. Vui lòng tải xuống file PDF để xem.
+          Trình duyệt của bạn không hỗ trợ xem Iframe.
         </iframe>
       </div>
     </div>
