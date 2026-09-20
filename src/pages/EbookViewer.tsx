@@ -30,8 +30,7 @@ const EbookViewer = () => {
       {/* Main Content Area - FlipHTML5 Iframe */}
       <div className="flex-1 w-full bg-midas-panel/50 border border-midas-gold/20 rounded-xl shadow-2xl overflow-hidden relative">
         <iframe 
-          // TODO: THAY ĐỔI ĐƯỜNG LINK BÊN DƯỚI THÀNH LINK FLIPHTML5 CỦA BẠN
-          src="https://online.fliphtml5.com/xxxx/yyyy/" 
+          src="https://online.fliphtml5.com/nguyen-trung-uit/The-Midas-King/" 
           className="w-full h-full border-none"
           title="Midas Ebook Flipbook"
           allowFullScreen
