@@ -201,7 +201,7 @@ export default function MindMap() {
       </div>
 
       {/* Mind Map Area */}
-      <div className="flex-1 relative w-full overflow-hidden mt-4 z-10" ref={containerRef}>
+      <div className="flex-1 min-h-[60vh] md:min-h-[750px] relative w-full overflow-hidden mt-4 z-10" ref={containerRef}>
         
         {/* Desktop Controls */}
         {!isMobile && (
