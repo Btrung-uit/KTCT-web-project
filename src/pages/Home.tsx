@@ -69,10 +69,10 @@ const Home = () => {
 
       {/* CTA CARDS SECTION */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16 w-full -mt-6 md:-mt-20 relative z-30">
-        <div className="flex flex-col md:flex-row gap-5 md:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-8">
           
           {/* Card 1: Ebook */}
-          <Link to="/ebook" className="group block w-full md:w-1/2">
+          <Link to="/ebook" className="group block w-full">
             <motion.div 
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -103,7 +103,7 @@ const Home = () => {
           </Link>
 
           {/* Card 2: Game */}
-          <Link to="/game" className="group block w-full md:w-1/2">
+          <Link to="/game" className="group block w-full">
             <motion.div 
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -133,6 +133,38 @@ const Home = () => {
             </motion.div>
           </Link>
           
+          {/* Card 3: Mindmap */}
+          <Link to="/mindmap" className="group block w-full">
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              whileHover={{ scale: 1.02, boxShadow: "0px 0px 30px rgba(212,175,55,0.4)" }}
+              transition={{ type: "spring", stiffness: 300, damping: 25, delay: 0.2 }}
+              className="relative min-h-[220px] md:min-h-[280px] rounded-[16px] overflow-hidden border border-midas-gold/40 bg-midas-panel flex flex-col p-6 shadow-xl"
+            >
+              <div className="absolute inset-0 z-0 bg-midas-dark">
+                {/* Fallback pattern if image is missing */}
+                <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-midas-gold via-transparent to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-midas-dark/95 via-midas-dark/60 to-midas-dark/20 z-10"></div>
+              </div>
+              <div className="relative z-10 flex flex-col h-full justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="w-12 h-12 rounded-full bg-midas-gold/20 flex items-center justify-center backdrop-blur-md border border-midas-gold/30">
+                      <GraduationCap className="w-6 h-6 text-midas-gold" />
+                    </div>
+                    <ChevronRight className="w-6 h-6 text-midas-gold/50 group-hover:text-midas-gold transition-colors" />
+                  </div>
+                  <h3 className="font-serif text-2xl md:text-3xl font-bold text-midas-gold uppercase mb-2">Sơ Đồ Tư Duy</h3>
+                  <p className="text-midas-ivory/80 text-sm md:text-base leading-relaxed pr-4">
+                    Tóm tắt toàn bộ mạch lập luận cốt lõi bằng sơ đồ tương tác trực quan.
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          </Link>
+
         </div>
       </section>
 

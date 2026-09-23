@@ -7,6 +7,7 @@ import Ebook from './pages/EbookViewer';
 import Game from './pages/Game';
 import Leaderboard from './pages/Leaderboard';
 import About from './pages/About';
+import MindMap from './pages/MindMap';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
             <Route path="/game" element={<Game />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
             <Route path="/about" element={<About />} />
+            <Route path="/mindmap" element={<MindMap />} />
           </Routes>
         </main>
         <Footer />
