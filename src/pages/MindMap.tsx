@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import * as Icons from 'lucide-react';
-import { mindmapData, MindMapNode } from '../data/mindmapData';
+import { mindmapData, type MindMapNode } from '../data/mindmapData';
 
 // --- Icon Helper ---
 const renderIcon = (iconName: string, className: string = "w-5 h-5") => {
