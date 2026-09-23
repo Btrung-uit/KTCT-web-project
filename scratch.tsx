@@ -41,7 +41,7 @@ const MobileNode = ({ node, level = 0 }: { node: MindMapNode; level?: number }) 
               <ul className="mt-3 space-y-1.5">
                 {node.points.map((pt, i) => (
                   <li key={i} className="text-sm text-midas-ivory/80 flex items-start">
-                    <span className="text-midas-gold mr-2 mt-0.5">•</span>
+                    <span className="text-midas-gold mr-2 mt-0.5">â€¢</span>
                     <span className="leading-snug">{pt}</span>
                   </li>
                 ))}
@@ -103,40 +103,11 @@ const DesktopNode = ({ node, isRoot = false, onClick }: { node: MindMapNode; isR
         <ul className={`mt-3 space-y-1.5 ${isRoot ? 'text-left' : ''}`}>
           {node.points.map((pt, i) => (
             <li key={i} className="text-sm text-midas-ivory/80 flex items-start leading-snug">
-              <span className="text-midas-gold mr-2 mt-0.5">•</span>
+              <span className="text-midas-gold mr-2 mt-0.5">â€¢</span>
               {pt}
             </li>
           ))}
         </ul>
-      )}
-    </div>
-  );
-};
-
-// --- Desktop Branch Group ---
-const BranchGroup = ({ branch, isLeft = false }: { branch: MindMapNode, isLeft?: boolean }) => {
-  return (
-    <div className={`flex items-center ${isLeft ? 'flex-row-reverse' : 'flex-row'}`}>
-      
-      <div className="relative z-10">
-        <DesktopNode node={branch} />
-        {/* Horizontal stub from branch */}
-        <div className={`absolute top-1/2 -translate-y-1/2 w-12 h-[2px] bg-midas-gold/40 ${isLeft ? '-left-12' : '-right-12'}`} />
-      </div>
-
-      {branch.children && branch.children.length > 0 && (
-        <div className={`flex flex-col justify-center gap-6 relative py-4 ${isLeft ? 'mr-12' : 'ml-12'}`}>
-          {/* Vertical line connecting children */}
-          <div className={`absolute top-12 bottom-12 w-[2px] bg-midas-gold/40 ${isLeft ? '-right-12' : '-left-12'}`} />
-          
-          {branch.children.map(child => (
-            <div key={child.id} className="relative z-10">
-              {/* Horizontal stub to child */}
-              <div className={`absolute top-1/2 -translate-y-1/2 w-12 h-[2px] bg-midas-gold/40 ${isLeft ? '-right-12' : '-left-12'}`} />
-              <DesktopNode node={child} />
-            </div>
-          ))}
-        </div>
       )}
     </div>
   );
@@ -207,24 +178,24 @@ export default function MindMap() {
       {/* Header Info */}
       <div className="relative z-20 max-w-7xl mx-auto px-4 md:px-6 pt-8 pb-4 text-center w-full">
         <h1 className="text-3xl md:text-5xl font-serif font-bold text-midas-gold uppercase tracking-widest mb-3 drop-shadow-lg">
-          Sơ đồ tư duy Midas
+          SÆ¡ Ä‘á»“ tÆ° duy Midas
         </h1>
         <p className="text-midas-ivory/80 text-sm md:text-base max-w-2xl mx-auto italic">
-          "Từ câu chuyện về vàng → bản chất của tiền → thế nào mới là của cải thực sự?"
+          "Tá»« cÃ¢u chuyá»‡n vá» vÃ ng â†’ báº£n cháº¥t cá»§a tiá»n â†’ tháº¿ nÃ o má»›i lÃ  cá»§a cáº£i thá»±c sá»±?"
         </p>
         
         {/* Summary 30s Box */}
         <div className="mt-8 bg-midas-dark/60 border border-midas-gold/30 rounded-xl p-5 max-w-3xl mx-auto text-left shadow-lg backdrop-blur-sm">
           <div className="flex items-center text-midas-gold mb-3">
             <Icons.Timer className="w-5 h-5 mr-2" />
-            <h3 className="font-bold font-serif">NẾU CHỈ CÓ 30 GIÂY, HÃY NHỚ 5 ĐIỀU NÀY:</h3>
+            <h3 className="font-bold font-serif">Náº¾U CHá»ˆ CÃ“ 30 GIÃ‚Y, HÃƒY NHá»š 5 ÄIá»€U NÃ€Y:</h3>
           </div>
           <ol className="list-decimal pl-5 text-sm md:text-base text-midas-ivory/90 space-y-2">
-            <li>Midas đã nhầm lẫn vàng với của cải thực sự.</li>
-            <li>Tiền hình thành từ nhu cầu trao đổi của sản xuất hàng hóa.</li>
-            <li>Vàng từng là vật ngang giá chung lý tưởng.</li>
-            <li>Tiền có 5 chức năng cốt lõi (Thước đo giá trị, Lưu thông, Cất trữ, Thanh toán, Tiền thế giới).</li>
-            <li><strong>Bẫy Midas:</strong> Nhiều tiền hoặc giá tài sản tăng không tự động đồng nghĩa với xã hội giàu thêm.</li>
+            <li>Midas Ä‘Ã£ nháº§m láº«n vÃ ng vá»›i cá»§a cáº£i thá»±c sá»±.</li>
+            <li>Tiá»n hÃ¬nh thÃ nh tá»« nhu cáº§u trao Ä‘á»•i cá»§a sáº£n xuáº¥t hÃ ng hÃ³a.</li>
+            <li>VÃ ng tá»«ng lÃ  váº­t ngang giÃ¡ chung lÃ½ tÆ°á»Ÿng.</li>
+            <li>Tiá»n cÃ³ 5 chá»©c nÄƒng cá»‘t lÃµi (ThÆ°á»›c Ä‘o giÃ¡ trá»‹, LÆ°u thÃ´ng, Cáº¥t trá»¯, Thanh toÃ¡n, Tiá»n tháº¿ giá»›i).</li>
+            <li><strong>Báº«y Midas:</strong> Nhiá»u tiá»n hoáº·c giÃ¡ tÃ i sáº£n tÄƒng khÃ´ng tá»± Ä‘á»™ng Ä‘á»“ng nghÄ©a vá»›i xÃ£ há»™i giÃ u thÃªm.</li>
           </ol>
         </div>
       </div>
@@ -255,14 +226,14 @@ export default function MindMap() {
             {/* Conclusion Node Mobile */}
             <div className="bg-red-900/20 border-2 border-midas-gold p-6 rounded-xl text-center mt-10 shadow-[0_0_20px_rgba(212,175,55,0.15)]">
               <Icons.Crown className="w-10 h-10 text-midas-gold mx-auto mb-4" />
-              <h2 className="text-xl font-serif font-bold text-midas-gold mb-4">KẾT LUẬN — MIDAS ĐÃ SAI Ở ĐÂU?</h2>
-              <p className="text-midas-ivory/90 mb-3 font-bold">Midas đã đồng nhất vàng và tiền với của cải.</p>
+              <h2 className="text-xl font-serif font-bold text-midas-gold mb-4">Káº¾T LUáº¬N â€” MIDAS ÄÃƒ SAI á»ž ÄÃ‚U?</h2>
+              <p className="text-midas-ivory/90 mb-3 font-bold">Midas Ä‘Ã£ Ä‘á»“ng nháº¥t vÃ ng vÃ  tiá»n vá»›i cá»§a cáº£i.</p>
               <p className="text-midas-ivory/70 text-sm mb-6 leading-relaxed">
-                Tiền, giá cả và thị giá tài sản có thể tăng, nhưng điều đó không tự động đồng nghĩa với việc xã hội tạo ra thêm của cải tương ứng.
+                Tiá»n, giÃ¡ cáº£ vÃ  thá»‹ giÃ¡ tÃ i sáº£n cÃ³ thá»ƒ tÄƒng, nhÆ°ng Ä‘iá»u Ä‘Ã³ khÃ´ng tá»± Ä‘á»™ng Ä‘á»“ng nghÄ©a vá»›i viá»‡c xÃ£ há»™i táº¡o ra thÃªm cá»§a cáº£i tÆ°Æ¡ng á»©ng.
               </p>
               <div className="border-t border-midas-gold/30 pt-4 mt-2">
                 <p className="font-serif text-lg text-midas-gold italic">
-                  "ĐỪNG NHẦM LẪN GIÀU CÓ TRÊN GIẤY VỚI CỦA CẢI THỰC."
+                  "Äá»ªNG NHáº¦M LáºªN GIÃ€U CÃ“ TRÃŠN GIáº¤Y Vá»šI Cá»¦A Cáº¢I THá»°C."
                 </p>
               </div>
             </div>
@@ -288,61 +259,123 @@ export default function MindMap() {
               }}
               transition={{ type: 'tween', duration: 0 }}
             >
-              <div className="flex items-center justify-center min-w-[max-content] min-h-[max-content] p-24">
+              <div className="relative w-[1800px] h-[1000px] flex items-center justify-center">
                 
-                {/* LEFT BRANCHES */}
-                <div className="flex flex-col gap-12 relative z-10 mr-16">
-                  {/* Vertical stub connecting left branches */}
-                  <div className="absolute top-[20%] bottom-[20%] -right-16 w-[2px] bg-midas-gold/40" />
-                  <div className="absolute top-1/2 -translate-y-1/2 -right-16 w-16 h-[2px] bg-midas-gold/40" />
-                  
-                  <div className="relative">
-                    <div className="absolute top-1/2 -translate-y-1/2 -right-16 w-16 h-[2px] bg-midas-gold/40" />
-                    <BranchGroup branch={mindmapData.children![0]} isLeft />
-                  </div>
-                  <div className="relative">
-                    <div className="absolute top-1/2 -translate-y-1/2 -right-16 w-16 h-[2px] bg-midas-gold/40" />
-                    <BranchGroup branch={mindmapData.children![1]} isLeft />
-                  </div>
-                </div>
+                {/* SVG Connecting Lines */}
+                <svg className="absolute inset-0 w-full h-full pointer-events-none z-0">
+                  <g stroke="#C9A24A" strokeWidth="2" fill="none" opacity="0.4" strokeLinecap="round">
+                    {/* Root to Left branches (0, 1) */}
+                    <path d="M 900 500 Q 750 500 700 300" />
+                    <path d="M 900 500 Q 750 500 700 700" />
+                    
+                    {/* Root to Right branches (2, 3, 4) */}
+                    <path d="M 900 500 Q 1050 500 1100 200" />
+                    <path d="M 900 500 Q 1050 500 1100 500" />
+                    <path d="M 900 500 Q 1050 500 1100 800" />
+
+                    {/* Left Branch 0 -> Children */}
+                    <path d="M 444 300 L 300 250" />
+                    <path d="M 444 300 L 300 350" />
+
+                    {/* Left Branch 1 -> Children */}
+                    <path d="M 444 700 L 300 600" />
+                    <path d="M 444 700 L 300 700" />
+                    <path d="M 444 700 L 300 800" />
+
+                    {/* Right Branch 2 -> Children */}
+                    <path d="M 1356 200 L 1500 100" />
+                    <path d="M 1356 200 L 1500 200" />
+                    <path d="M 1356 200 L 1500 300" />
+
+                    {/* Right Branch 3 -> Children */}
+                    <path d="M 1356 500 L 1500 360" />
+                    <path d="M 1356 500 L 1500 430" />
+                    <path d="M 1356 500 L 1500 500" />
+                    <path d="M 1356 500 L 1500 570" />
+                    <path d="M 1356 500 L 1500 640" />
+
+                    {/* Right Branch 4 -> Children */}
+                    <path d="M 1356 800 L 1500 700" />
+                    <path d="M 1356 800 L 1500 770" />
+                    <path d="M 1356 800 L 1500 840" />
+                    <path d="M 1356 800 L 1500 910" />
+                  </g>
+                </svg>
 
                 {/* CENTRAL ROOT NODE */}
-                <div className="relative z-20">
+                <div className="absolute left-[756px] top-[400px] z-10">
                   <DesktopNode node={mindmapData} isRoot />
                 </div>
 
-                {/* RIGHT BRANCHES */}
-                <div className="flex flex-col gap-12 relative z-10 ml-16">
-                  {/* Vertical stub connecting right branches */}
-                  <div className="absolute top-[10%] bottom-[10%] -left-16 w-[2px] bg-midas-gold/40" />
-                  <div className="absolute top-1/2 -translate-y-1/2 -left-16 w-16 h-[2px] bg-midas-gold/40" />
-                  
-                  {mindmapData.children!.slice(2).map(branch => (
-                    <div key={branch.id} className="relative">
-                      <div className="absolute top-1/2 -translate-y-1/2 -left-16 w-16 h-[2px] bg-midas-gold/40" />
-                      <BranchGroup branch={branch} />
-                    </div>
-                  ))}
+                {/* LEFT BRANCHES (0, 1) */}
+                {/* Branch 1 */}
+                <div className="absolute left-[444px] top-[250px] z-10">
+                  <DesktopNode node={mindmapData.children![0]} />
                 </div>
+                {/* Children of Branch 1 */}
+                <div className="absolute left-[44px] top-[180px] z-10"><DesktopNode node={mindmapData.children![0].children![0]} /></div>
+                <div className="absolute left-[44px] top-[320px] z-10"><DesktopNode node={mindmapData.children![0].children![1]} /></div>
+
+                {/* Branch 2 */}
+                <div className="absolute left-[444px] top-[650px] z-10">
+                  <DesktopNode node={mindmapData.children![1]} />
+                </div>
+                {/* Children of Branch 2 */}
+                <div className="absolute left-[44px] top-[550px] z-10"><DesktopNode node={mindmapData.children![1].children![0]} /></div>
+                <div className="absolute left-[44px] top-[670px] z-10"><DesktopNode node={mindmapData.children![1].children![1]} /></div>
+                <div className="absolute left-[44px] top-[800px] z-10"><DesktopNode node={mindmapData.children![1].children![2]} /></div>
+
+
+                {/* RIGHT BRANCHES (2, 3, 4) */}
+                {/* Branch 3 */}
+                <div className="absolute left-[1100px] top-[150px] z-10">
+                  <DesktopNode node={mindmapData.children![2]} />
+                </div>
+                {/* Children of Branch 3 */}
+                <div className="absolute left-[1500px] top-[50px] z-10"><DesktopNode node={mindmapData.children![2].children![0]} /></div>
+                <div className="absolute left-[1500px] top-[170px] z-10"><DesktopNode node={mindmapData.children![2].children![1]} /></div>
+                <div className="absolute left-[1500px] top-[310px] z-10"><DesktopNode node={mindmapData.children![2].children![2]} /></div>
+
+                {/* Branch 4 */}
+                <div className="absolute left-[1100px] top-[450px] z-10">
+                  <DesktopNode node={mindmapData.children![3]} />
+                </div>
+                {/* Children of Branch 4 */}
+                <div className="absolute left-[1500px] top-[400px] z-10 scale-[0.85] origin-left"><DesktopNode node={mindmapData.children![3].children![0]} /></div>
+                <div className="absolute left-[1500px] top-[480px] z-10 scale-[0.85] origin-left"><DesktopNode node={mindmapData.children![3].children![1]} /></div>
+                <div className="absolute left-[1500px] top-[560px] z-10 scale-[0.85] origin-left"><DesktopNode node={mindmapData.children![3].children![2]} /></div>
+                <div className="absolute left-[1500px] top-[640px] z-10 scale-[0.85] origin-left"><DesktopNode node={mindmapData.children![3].children![3]} /></div>
+                <div className="absolute left-[1500px] top-[720px] z-10 scale-[0.85] origin-left"><DesktopNode node={mindmapData.children![3].children![4]} /></div>
+
+                {/* Branch 5 */}
+                <div className="absolute left-[1100px] top-[750px] z-10">
+                  <DesktopNode node={mindmapData.children![4]} />
+                </div>
+                {/* Children of Branch 5 */}
+                <div className="absolute left-[1500px] top-[760px] z-10 scale-[0.9] origin-left"><DesktopNode node={mindmapData.children![4].children![0]} /></div>
+                <div className="absolute left-[1500px] top-[860px] z-10 scale-[0.9] origin-left"><DesktopNode node={mindmapData.children![4].children![1]} /></div>
+                <div className="absolute left-[1500px] top-[960px] z-10 scale-[0.9] origin-left"><DesktopNode node={mindmapData.children![4].children![2]} /></div>
+                <div className="absolute left-[1500px] top-[1080px] z-10 scale-[0.9] origin-left"><DesktopNode node={mindmapData.children![4].children![3]} /></div>
 
               </div>
               
               {/* CONCLUSION NODE DESKTOP */}
-              <div className="mt-16 w-full max-w-[800px] mx-auto pb-32">
+              <div className="absolute top-[1300px] left-1/2 -translate-x-1/2 w-[800px] z-20 pb-[200px]">
                 <div className="bg-red-900/10 border-2 border-midas-gold/60 p-10 rounded-2xl text-center shadow-[0_0_30px_rgba(212,175,55,0.2)] backdrop-blur-md">
                   <Icons.Crown className="w-12 h-12 text-midas-gold mx-auto mb-4" />
-                  <h2 className="text-3xl font-serif font-bold text-midas-gold mb-6 tracking-wider">KẾT LUẬN — MIDAS ĐÃ SAI Ở ĐÂU?</h2>
-                  <p className="text-midas-ivory/90 mb-4 font-bold text-xl">Midas đã đồng nhất vàng và tiền với của cải.</p>
+                  <h2 className="text-3xl font-serif font-bold text-midas-gold mb-6 tracking-wider">Káº¾T LUáº¬N â€” MIDAS ÄÃƒ SAI á»ž ÄÃ‚U?</h2>
+                  <p className="text-midas-ivory/90 mb-4 font-bold text-xl">Midas Ä‘Ã£ Ä‘á»“ng nháº¥t vÃ ng vÃ  tiá»n vá»›i cá»§a cáº£i.</p>
                   <p className="text-midas-ivory/70 text-lg mb-8 leading-relaxed max-w-2xl mx-auto">
-                    Tiền, giá cả và thị giá tài sản có thể tăng, nhưng điều đó không tự động đồng nghĩa với việc xã hội tạo ra thêm của cải tương ứng. Của cải thực sự gắn với những giá trị sử dụng và hàng hóa, dịch vụ đáp ứng nhu cầu của con người.
+                    Tiá»n, giÃ¡ cáº£ vÃ  thá»‹ giÃ¡ tÃ i sáº£n cÃ³ thá»ƒ tÄƒng, nhÆ°ng Ä‘iá»u Ä‘Ã³ khÃ´ng tá»± Ä‘á»™ng Ä‘á»“ng nghÄ©a vá»›i viá»‡c xÃ£ há»™i táº¡o ra thÃªm cá»§a cáº£i tÆ°Æ¡ng á»©ng. Cá»§a cáº£i thá»±c sá»± gáº¯n vá»›i nhá»¯ng giÃ¡ trá»‹ sá»­ dá»¥ng vÃ  hÃ ng hÃ³a, dá»‹ch vá»¥ Ä‘Ã¡p á»©ng nhu cáº§u cá»§a con ngÆ°á»i.
                   </p>
                   <div className="border-t border-midas-gold/30 pt-6 mt-4">
                     <p className="font-serif text-2xl text-midas-gold italic font-bold">
-                      "ĐỪNG NHẦM LẪN GIÀU CÓ TRÊN GIẤY VỚI CỦA CẢI THỰC."
+                      "Äá»ªNG NHáº¦M LáºªN GIÃ€U CÃ“ TRÃŠN GIáº¤Y Vá»šI Cá»¦A Cáº¢I THá»°C."
                     </p>
                   </div>
                 </div>
               </div>
+
             </motion.div>
           </div>
         )}
@@ -351,13 +384,13 @@ export default function MindMap() {
       {/* FOOTER CTA */}
       <div className="relative z-20 border-t border-midas-gold/20 bg-midas-dark/95 py-10 px-4 mt-auto">
         <div className="max-w-4xl mx-auto text-center">
-          <h3 className="font-serif text-2xl text-midas-ivory font-bold mb-6">MUỐN HIỂU MIDAS ĐẦY ĐỦ HƠN?</h3>
+          <h3 className="font-serif text-2xl text-midas-ivory font-bold mb-6">MUá»N HIá»‚U MIDAS Äáº¦Y Äá»¦ HÆ N?</h3>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link to="/ebook" className="px-8 py-4 bg-midas-gold text-black font-bold rounded-lg hover:bg-yellow-500 transition-colors flex items-center justify-center">
-              <Icons.BookOpen className="w-5 h-5 mr-2" /> ĐỌC EBOOK CHI TIẾT
+              <Icons.BookOpen className="w-5 h-5 mr-2" /> Äá»ŒC EBOOK CHI TIáº¾T
             </Link>
             <Link to="/game" className="px-8 py-4 bg-transparent border-2 border-midas-gold text-midas-gold font-bold rounded-lg hover:bg-midas-gold/10 transition-colors flex items-center justify-center">
-              <Icons.Gamepad2 className="w-5 h-5 mr-2" /> THỬ THÁCH 20 CÂU HỎI
+              <Icons.Gamepad2 className="w-5 h-5 mr-2" /> THá»¬ THÃCH 20 CÃ‚U Há»ŽI
             </Link>
           </div>
         </div>
@@ -365,5 +398,4 @@ export default function MindMap() {
     </div>
   );
 }
-
 
