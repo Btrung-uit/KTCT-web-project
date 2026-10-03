@@ -38,7 +38,7 @@ const Navbar = () => {
     { name: 'Đọc Ebook', path: '/ebook' },
     { name: 'Chơi trò chơi', path: '/game' },
     { name: 'Bảng xếp hạng', path: '/leaderboard' },
-    { name: 'So d? tu duy', path: '/mindmap' },
+    { name: 'Sơ đồ tư duy', path: '/mindmap' },
     { name: 'Về chúng tôi', path: '/about' },
   ];
 
