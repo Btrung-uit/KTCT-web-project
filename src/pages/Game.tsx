@@ -61,6 +61,18 @@ const Game = () => {
     return () => clearInterval(timer);
   }, [gameState, startTime]);
 
+  // KICK-OUT LOGIC: If admin locks the game while a player is playing
+  useEffect(() => {
+    if (isGameLocked && gameState === 'playing') {
+      alert('Trò chơi đã bị khóa bởi Giảng viên/Quản trị viên!');
+      setGameState('intro');
+      setCurrentQIndex(0);
+      setScore(0);
+      setCorrectCount(0);
+      setPlayerName('');
+    }
+  }, [isGameLocked, gameState]);
+
   const handleStart = (e: React.FormEvent) => {
     e.preventDefault();
     if (playerName.trim()) {
@@ -92,6 +104,8 @@ const Game = () => {
   };
 
   const saveScore = async () => {
+    if (isGameLocked) return; // Bảo mật thêm: chặn ghi điểm nếu đang khóa
+
     const finalTimeMs = Date.now() - startTime;
     const minutes = Math.floor(finalTimeMs / 60000);
     const seconds = Math.floor((finalTimeMs % 60000) / 1000);
@@ -104,13 +118,6 @@ const Game = () => {
       time: timeStr,
       date: new Date().toISOString()
     };
-
-    if (selectedOption === questions[currentQIndex].correctAnswer) {
-        newScore.score += 50;
-        newScore.correct += 1;
-        setScore(newScore.score);
-        setCorrectCount(newScore.correct);
-    }
 
     try {
       if (db) {
